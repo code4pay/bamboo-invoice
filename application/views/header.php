@@ -13,8 +13,9 @@ header('Content-Type: text/html; Charset=UTF-8');
 	and no, I'm not very impressed by your work. And for the love of Pete, don't come to my blog and forums bragging
 	about your "improvements" to Bamboo please.
 */
-echo 'Bam'.'boo'.'In'.'voice'; // this is like this so that nobody can get it by a search and replace
+echo 'EASY AS invoicing';
 /**
+    From the Original Author.
 	Several times now I've had people take my work, strip out the word "bamboo" and rename it something else - then 
 	claim they have written their own "invoicing software".  As a developer, this sucks.  Usually its a dumb search 
 	and replace, and they replace my name with their own.  Look, if you want to modify Bamboo, fine, but please don't
@@ -34,8 +35,8 @@ echo ': '.$page_title;
 ?></title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="author" content="Derek Allard - http://www.derekallard.com" />
-<meta name="description" content="BambooInvoice : Simple, Open Source, Online Invoicing" />
-<meta name="keywords" content="BambooInvoice, Online Invoicing" />
+<meta name="description" content="Easy As Invoicing easy invoicing" />
+<meta name="keywords" content="Easy as Invoicing, Online Invoicing" />
 <?php if ($this->settings_model->get_setting('demo_flag') == 'y'):?>
 <meta name="robots" content="all" />
 <?php else :?>
@@ -48,9 +49,12 @@ echo ': '.$page_title;
 <script type="text/javascript" src="<?php echo base_url()?>js/prototype.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/lightbox.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>js/scriptaculous/scriptaculous.js?load=effects,dragdrop"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/moment.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>js/pikaday.js"></script>
 <link rel="shortcut icon" href="<?php echo base_url()?>favicon.ico" type="image/ico" />
 <link type="text/css" rel="stylesheet" href="<?php echo base_url()?>css/bamboo.css" />
 <link type="text/css" rel="stylesheet" href="<?php echo base_url()?>css/lightbox.css" />
+<link type="text/css" rel="stylesheet" href="<?php echo base_url()?>css/pikaday.css" />
 <link type="text/css" rel="stylesheet" media="print" href="<?php echo base_url()?>css/bamboo_print.css" />
 <script type="text/javascript">
 base_url = "<?php echo site_url();?>/";
@@ -87,11 +91,10 @@ lang_amount = new String("<?php echo ($this->lang->line('invoice_amount'));?>");
 	<div id="container">
 		<div id="masthead">
 
-			<h1 id="bamboo_logo"><a href="<?php echo site_url()?>"><?php echo $this->lang->line('bambooinvoice_logo');?></a></h1>
 
 			<?php if ($this->session->userdata('logged_in')):?>
 			<ul id="submenu">
-				<li><a href="<?php echo site_url('help')?>" class="submenu_link help"><?php echo $this->lang->line('menu_help');?></a></li>
+				<!-- <li><a href="<?php echo site_url('help')?>" class="submenu_link help"><?php echo $this->lang->line('menu_help');?></a></li> -->
 				<li><a href="<?php echo site_url('logout/confirm')?>" class="submenu_link logout lbOn"><?php echo $this->lang->line('menu_logout');?></a></li>
 			</ul>
 			<?php endif;?>

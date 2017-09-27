@@ -66,15 +66,19 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 * @return	resource
 	 */
 	function db_connect()
-	{
+    {
+        $mysql_connection;
 		if ($this->port != '')
 		{
-			return @mysqli_connect($this->hostname, $this->username, $this->password, $this->database, $this->port);
+            
+            $mysql_connection = @mysqli_connect($this->hostname, $this->username, $this->password, $this->database, $this->port);
 		}
 		else
 		{
-			return @mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
-		}
+			$mysql_connection =  @mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
+        }
+        $mysql_connection->query("SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',')");
+        return $mysql_connection;
 
 	}
 

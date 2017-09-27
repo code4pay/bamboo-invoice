@@ -16,7 +16,7 @@ class Invoices extends MY_Controller {
 
 	function index()
 	{
-		$data['clientList'] = $this->clients_model->getAllClients(); // activate the option
+		$data['clientList'] = $this->clients_model->getAllClients($this->session->userdata('company_id')); // activate the option
 		$data['extraHeadContent'] = "<script type=\"text/javascript\" src=\"". base_url()."js/newinvoice.js\"></script>\n";
 		$data['extraHeadContent'] .= "<script type=\"text/javascript\" src=\"". base_url()."js/search.js\"></script>\n";
 		$data['extraHeadContent'] .= "<link type=\"text/css\" rel=\"stylesheet\" href=\"". base_url()."css/invoice.css\" />\n";
@@ -36,7 +36,6 @@ class Invoices extends MY_Controller {
 
 		$data['status_menu'] = TRUE; // pass status_menu
 		$data['page_title'] = $this->lang->line('menu_invoices');
-
 		$this->load->view('invoices/index', $data);
 	}
 
@@ -44,7 +43,7 @@ class Invoices extends MY_Controller {
 
 	function overdue($offset = 0)
 	{
-		$data['clientList'] = $this->clients_model->getAllClients(); // activate the option
+		$data['clientList'] = $this->clients_model->getAllClients($this->session->userdata('company_id')); // activate the option
 		$data['extraHeadContent'] = "<script type=\"text/javascript\" src=\"". base_url()."js/newinvoice.js\"></script>\n";
 		$data['extraHeadContent'] .= "<link type=\"text/css\" rel=\"stylesheet\" href=\"". base_url()."css/invoice.css\" />\n";
 
@@ -65,7 +64,7 @@ class Invoices extends MY_Controller {
 
 	function open($offset = 0)
 	{
-		$data['clientList'] = $this->clients_model->getAllClients(); // activate the option
+		$data['clientList'] = $this->clients_model->getAllClients($this->session->userdata('company_id')); // activate the option
 		$data['extraHeadContent'] = "<script type=\"text/javascript\" src=\"". base_url()."js/newinvoice.js\"></script>\n";
 		$data['extraHeadContent'] .= "<link type=\"text/css\" rel=\"stylesheet\" href=\"". base_url()."css/invoice.css\" />\n";
 
@@ -87,7 +86,7 @@ class Invoices extends MY_Controller {
 
 	function closed($offset = 0)
 	{
-		$data['clientList'] = $this->clients_model->getAllClients(); // activate the option
+		$data['clientList'] = $this->clients_model->getAllClients($this->session->userdata('company_id')); // activate the option
 		$data['extraHeadContent'] = "<script type=\"text/javascript\" src=\"". base_url()."js/newinvoice.js\"></script>\n";
 		$data['extraHeadContent'] .= "<link type=\"text/css\" rel=\"stylesheet\" href=\"". base_url()."css/invoice.css\" />\n";
 
@@ -109,7 +108,7 @@ class Invoices extends MY_Controller {
 
 	function all($offset = 0)
 	{
-		$data['clientList'] = $this->clients_model->getAllClients(); // activate the option
+		$data['clientList'] = $this->clients_model->getAllClients($this->session->userdata('company_id')); // activate the option
 		$data['extraHeadContent'] = "<script type=\"text/javascript\" src=\"". base_url()."js/newinvoice.js\"></script>\n";
 		$data['extraHeadContent'] .= "<link type=\"text/css\" rel=\"stylesheet\" href=\"". base_url()."css/invoice.css\" />\n";
 
@@ -190,6 +189,7 @@ class Invoices extends MY_Controller {
 		$data['extraHeadContent'] .= "<script type=\"text/javascript\" src=\"". base_url()."js/createinvoice.js\"></script>\n";
 		$data['extraHeadContent'] .= js_calendar_script('my_form');
 
+
 		$this->_validation(); // Load the validation rules and fields
 
 		$data['invoiceDate'] = date("Y-m-d");
@@ -211,7 +211,8 @@ class Invoices extends MY_Controller {
 									'tax1_rate' => $this->input->post('tax1_rate'),
 									'tax2_desc' => $this->input->post('tax2_description'),
 									'tax2_rate' => $this->input->post('tax2_rate'),
-									'invoice_note' => $this->input->post('invoice_note')
+									'invoice_note' => $this->input->post('invoice_note'),
+                                    'company_id' => $this->session->userdata('company_id')
 								);
 
 			$invoice_id = $this->invoices_model->addInvoice($invoice_data);
@@ -253,7 +254,7 @@ class Invoices extends MY_Controller {
 	{
 		// page for users without javascript enabled
 		$data['page_title'] = $this->lang->line('menu_new_invoice');
-		$data['clientList'] = $this->clients_model->getAllClients(); // activate the option
+		$data['clientList'] = $this->clients_model->getAllClients($this->session->userdata('company_id')); // activate the option
 		$this->load->view('invoices/newinvoice_first', $data);
 	}
 
@@ -362,7 +363,7 @@ class Invoices extends MY_Controller {
 		$data['extraHeadContent'] .= "<link type=\"text/css\" rel=\"stylesheet\" href=\"". base_url()."css/invoice.css\" />\n";
 		$data['extraHeadContent'] .= "<script type=\"text/javascript\" src=\"". base_url()."js/createinvoice.js\"></script>\n";
 		$data['extraHeadContent'] .= js_calendar_script('my_form');
-		$data['clientListEdit'] = $this->clients_model->getAllClients();
+		$data['clientListEdit'] = $this->clients_model->getAllClients($this->session->userdata('company_id'));
 
 		$this->_validation_edit(); // Load the validation rules and fields
 
@@ -470,7 +471,7 @@ class Invoices extends MY_Controller {
 		$data['extraHeadContent'] .= "<link type=\"text/css\" rel=\"stylesheet\" href=\"". base_url()."css/invoice.css\" />\n";
 		$data['extraHeadContent'] .= "<script type=\"text/javascript\" src=\"". base_url()."js/createinvoice.js\"></script>\n";
 		$data['extraHeadContent'] .= js_calendar_script('my_form');
-		$data['clientListEdit'] = $this->clients_model->getAllClients();
+		$data['clientListEdit'] = $this->clients_model->getAllClients($this->session->userdata('company_id'));
 
 		$this->_validation_edit(); // Load the validation rules and fields
 
@@ -941,8 +942,9 @@ class Invoices extends MY_Controller {
 	{
 		$this->load->helper('logo');
 		$this->load->helper('path');
+        $company_id =     $company_id = $this->session->userdata('company_id').'/';
 
-		return get_logo($this->settings_model->get_setting('logo'.$target), $context);
+		return get_logo($this->settings_model->get_setting('logo'.$target), $context,$company_id);
 	}
 
 	// --------------------------------------------------------------------

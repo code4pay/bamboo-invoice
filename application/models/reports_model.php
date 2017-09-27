@@ -10,6 +10,7 @@ class reports_model extends CI_Model {
 		$this->db->join('invoices', 'invoices.client_id = clients.id');
 		$this->db->join('invoice_items', 'invoices.id = invoice_items.invoice_id');
 		$this->db->where('dateIssued >= "' . $start_date . '" and dateIssued <= "' . $end_date . '"');
+        $this->db->where('invoices.company_id', $this->session->userdata('company_id'));
 		$this->db->order_by('clients.name');
 		$this->db->group_by('name');
 
@@ -25,6 +26,7 @@ class reports_model extends CI_Model {
 		$this->db->select('SUM(('.$this->db->dbprefix('invoice_items').'.amount*'.$this->db->dbprefix('invoice_items').'.quantity)*'.$this->db->dbprefix('invoices').'.tax2_rate/100) AS tax2_collected', FALSE);
 		$this->db->join('invoices', 'invoices.client_id = clients.id');
 		$this->db->join('invoice_items', 'invoices.id = invoice_items.invoice_id');
+        $this->db->where('invoices.company_id', $this->session->userdata('company_id'));
 		$this->db->where('dateIssued >= ', $start_date);
 		$this->db->where('dateIssued <= ', $end_date);
 
@@ -40,6 +42,7 @@ class reports_model extends CI_Model {
 		$this->db->select('invoices.id');
 		$this->db->join('clients', 'invoices.client_id = clients.id');
 		$this->db->join('invoice_items', 'invoices.id = invoice_items.invoice_id');
+        $this->db->where('invoices.company_id', $this->session->userdata('company_id'));
 		$this->db->where("dateIssued >= '$start_date'");
 		$this->db->where("dateIssued <= '$end_date'");
 		$this->db->order_by('dateIssued desc, invoice_number desc');

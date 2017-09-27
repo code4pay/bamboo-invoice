@@ -49,7 +49,9 @@ class Clientcontacts extends MY_Controller {
 																		$this->input->post('last_name'), 
 																		$this->input->post('email'), 
 																		$this->input->post('phone'),
-																		$this->input->post('title')
+																		$this->input->post('title'),
+                                                                        0,
+                                                                        $this->session->userdata('company_id')
 																	);
 
 			if (isAjax())

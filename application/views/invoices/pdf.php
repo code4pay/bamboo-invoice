@@ -180,13 +180,13 @@ table.stripe td {
 	<?php endif;?>
 
 	<div id="footer">
-		<?php if ($this->settings_model->get_setting('display_branding') == 'y'):?>
+
 			<p>
 				<?php echo $this->lang->line('invoice_generated_by');?> 
 				<?php echo $this->lang->line('bambooinvoice_logo');?><br />
-				<a href="http://www.bambooinvoice.org/">http://www.bambooinvoice.org</a>
+				<a href="http://www.easyasinvoicing.com">http://www.easyasinvoicing.com</a>
 			</p>
-		<?php endif;?>
+
 	</div>
 
 </body>

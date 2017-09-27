@@ -9,13 +9,26 @@ class Login extends MY_Controller {
 		$this->load->helper('string');
 		$this->load->library('encrypt');
 		$this->load->library('email');
+        $this->load->library('validation');
 	}
 
 	// --------------------------------------------------------------------
 
 	function index()
 	{
-		$data['extraHeadContent'] = "<script type=\"text/javascript\" src=\"". base_url()."js/login.js\"></script>\n";
+        $data['message'] = '';
+        $rules['primary_contact_email'] = "required|valid_email";
+        $rules['password'] 			= "min_length[4]|max_length[50]|alpha_dash";
+        $rules['password_confirm']	= "matches[password]";
+
+        $this->validation->set_rules($rules);
+
+        $fields['primary_contact_email'] = $this->lang->line('settings_primary_email');
+        $fields['password'] 		= $this->lang->line('login_password');
+        $fields['password_confirm']	= $this->lang->line('login_password_confirm');
+        $this->validation->set_fields($fields);
+
+        $data['extraHeadContent'] = "<script type=\"text/javascript\" src=\"". base_url()."js/login.js\"></script>\n";
 		$username = $this->input->post('username');
 
 		$this->load->helper('directory');

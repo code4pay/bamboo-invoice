@@ -55,7 +55,8 @@ class Site_sentry
 			{
 				$login_result = TRUE;
 				$id = $row->id;
-				$this->obj->db->where('id', $id);
+                $company_id = $row->company_id;
+ 				$this->obj->db->where('id', $id);
 				$this->obj->db->set('password_reset', '');
 				$this->obj->db->update('clientcontacts'); // if they have successfully logged in, we don't need that anymore
 			}
@@ -64,7 +65,8 @@ class Site_sentry
 		//If username and password match set the logged in flag in 'ci_sessions'
 		if ($login_result==1)
 		{
-			$credentials = array('user_id' => $id, 'logged_in' => $login_result);
+
+            $credentials = array('user_id' => $id, 'logged_in' => $login_result, 'company_id'=>$company_id);
 			$this->obj->session->set_userdata($credentials);
 			//On success redirect user to default page
 			redirect('','location');

@@ -16,7 +16,7 @@ $this->load->view('header');
 		<div class="controls">
 			<a href="#account_settings" id="account_settings_menu"><?php echo $this->lang->line('settings_account_settings');?></a>
 			<a href="#invoice_settings" id="invoice_settings_menu"><?php echo $this->lang->line('settings_invoice_settings');?></a>
-			<a href="#advanced_settings" id="advanced_settings_menu"><?php echo $this->lang->line('settings_advanced_settings');?></a>
+		    <a href="#invoice_logo_settings" id="invoice_logo_settings_menu"><?php echo $this->lang->line('settings_invoice_logo_settings');?></a> -->
 		</div>
 
 		<div class="scroller">
@@ -241,65 +241,22 @@ $this->load->view('header');
 						(ie: 5.0) <?php echo $this->validation->tax2_rate_error; ?>
 					</p>
 
+
+
 				</div>
 
-				<div class="section" id="advanced_settings">
+				<div class="section" id="invoice_logo_settings">
 
-					<div class="logo_holder">
-						<?php if (isset($company_logo)) {echo $company_logo;}?>
-					</div>
+                    <div class="logo_holder">
+                        <?php if (isset($company_logo)) {echo $company_logo;}?>
+                    </div>
 
-					<p>
-						<label for="userfile"><span><?php echo $this->lang->line('settings_logo');?> (jpg, gif)</span></label> 
-						<input name="userfile" type="file" id="userfile" />
-						<?php echo $this->validation->logo_error; ?>
-					</p>
-
-					<p>
-						<label for="display_branding"><span><?php echo $this->lang->line('settings_display_branding');?></span></label>
-						<input style="width: auto;" class="requiredfield" name="display_branding" type="checkbox" id="display_branding" size="20" value="y" <?php
-						if ($this->validation->set_checkbox('display_branding', 'y'))
-						{
-							echo $this->validation->set_checkbox('display_branding', 'y');
-						}
-						elseif ($this->settings_model->get_setting('display_branding') == 'y')
-						{
-							echo 'checked="checked"';
-						}
-						?> />
-						<?php echo $this->validation->display_branding_error; ?>
-					</p>
-
-					<p>
-						<label for="new_version_autocheck"><span><?php echo $this->lang->line('utilities_automatic_version_check');?></span></label>
-						<input style="width: auto;" class="requiredfield" name="new_version_autocheck" type="checkbox" id="new_version_autocheck" size="20" value="y" <?php
-						if ($this->validation->set_checkbox('new_version_autocheck', 'y'))
-						{
-							echo $this->validation->set_checkbox('new_version_autocheck', 'y');
-						}
-						elseif ($this->settings_model->get_setting('new_version_autocheck') == 'y')
-						{
-							echo 'checked="checked"';
-						}
-						?> />
-						<?php echo $this->validation->new_version_autocheck_error; ?>
-					</p>
-
-					<p>
-						<label for="save_invoices"><span><?php echo $this->lang->line('settings_save_invoices');?></span></label>
-						<input style="width: auto;" class="requiredfield" name="save_invoices" type="checkbox" id="save_invoices" size="20" value="y" <?php
-						if ($this->validation->set_checkbox('save_invoices', 'y'))
-						{
-							echo $this->validation->set_checkbox('save_invoices', 'y');
-						}
-						elseif ($this->settings_model->get_setting('save_invoices') == 'y')
-						{
-							echo 'checked="checked"';
-						}
-						?> />
-						<?php echo $this->validation->save_invoices_error; ?><br />
-						<span class="error"><?php echo $this->lang->line('settings_save_invoices_warning');?></span>
-					</p>
+                    <p>
+                        <label for="userfile"><span><?php echo $this->lang->line('settings_logo');?> (jpg, gif)</span></label>
+                        <input name="userfile" type="file" id="userfile" />
+                        <?php echo $this->lang->line('settings_image_prerequisite'); ?>
+                        <?php echo $this->validation->logo_error; ?>
+                    </p>
 
 				</div>
 			</div>

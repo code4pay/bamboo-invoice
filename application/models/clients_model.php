@@ -1,9 +1,10 @@
 <?php
 class clients_model extends CI_Model {
 
-	function countAllClients()
+	function countAllClients($company_id)
 	{
-		return $this->db->count_all('clients');
+        $this->db->where('company_id', $company_id);
+        return $this->db->count_all_results('clients');
 	}
 
 	// --------------------------------------------------------------------
@@ -11,13 +12,13 @@ class clients_model extends CI_Model {
 	function countClientInvoices($client_id)
 	{
 		$this->db->where('client_id', $client_id);
-
+        $this->db->where('invoices.company_id', $this->session->userdata('company_id'));
 		return $this->db->count_all_results('invoices');
 	}
 
 	// --------------------------------------------------------------------
 
-	function getAllClients()
+	function getAllClients($company_id)
 	{
 		// we need an array of company names to associate each contact with its company
 //		$companies = array();
@@ -25,7 +26,7 @@ class clients_model extends CI_Model {
 //		{
 //			$companies[$company->id] = $company->name;
 //		}
-
+        $this->db->where('company_id', $company_id);
 		$this->db->order_by('name', 'asc');
 
 		return $this->db->get('clients');

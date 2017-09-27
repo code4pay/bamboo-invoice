@@ -15,7 +15,7 @@ class Front extends MY_Controller {
 
 		if ($this->db->conn_id == "")
 		{
-			show_error("BambooInvoice could not connect to your database with the information provided in bamboo_system_files/application/config/database.php");
+			show_error("OOPs Sory an Error Occurred please try again later");
 		}
 
 		if ( ! $this->db->table_exists('settings'))
@@ -32,21 +32,13 @@ class Front extends MY_Controller {
 			$data['extraHeadContent'] = "<script type=\"text/javascript\" src=\"" . base_url()."js/newinvoice.js\"></script>\n";
 
 			// for the new invoice generation dropdown
-			$data['clientList'] = $this->clients_model->getAllClients();
+			$data['clientList'] = $this->clients_model->getAllClients($this->session->userdata('company_id'));
 
 			// is there a new version available?
 			$this->load->model('utilities_model');
 			$status = $this->utilities_model->_version_check();
 
-			if ($status == 'new')
-			{
-				$this->load->helper('url');
-				$data['message'] = $this->lang->line('utilities_new_version_available') . anchor('http://bambooinvoice.org', 'http://bambooinvoice.org');
-			}
-			else
-			{
 				$data['message'] = '';
-			}
 
 			$this->load->view('index/index_logged_in', $data);
 		}
@@ -59,6 +51,10 @@ class Front extends MY_Controller {
 				$data['page_title'] = $this->lang->line('menu_catchphrase_nobreak');
 				$this->load->view('index/index_logged_out', $data);
 			}
+            elseif(uri_string() ==='/signup')
+            {
+                error_log(uri_string());
+            }
 			else
 			{
 				redirect('login');

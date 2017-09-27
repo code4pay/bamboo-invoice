@@ -2,10 +2,14 @@
 * control panel
 */
 .control_panel {
-	list-style: none;
+	display: inline-block;
 	margin: 0;
 	padding: 0;
-	width: 700px;
+	max-width: 700px;
+}
+.control_panel div {
+    display: inline-block;
+    margin:10px;
 }
 .control_panel a {
 	display: block;
@@ -115,9 +119,7 @@ input {
 	background: url(../img/bodyback.png) repeat-x top;	max-width: 1300px;
 }
 
-#container {
-	background: url(../img/menu_bottom.png) no-repeat left bottom;
-}
+
 #masthead {
 	background: url(../img/village_back.png) no-repeat right top;
 	height: 109px;
@@ -406,15 +408,15 @@ input {
 	padding: 0 20px 0 55px!important;
 	background: url(../img/download.png) no-repeat left!important;
 }
-#loginform #username, #loginform #password {
+.loginform input {
 	width: 200px;
 }
 
-#loginform p {
+.loginform p {
 	margin: 5px;
 }
 
-#loginform, .address, .work_description, #enterPayment, #emailInvoice, #invoice_note_form {
+.loginform, .address, .work_description, #enterPayment, #emailInvoice, #invoice_note_form {
 	border: 1px solid #CCC;
 	background: #F6F6F6;
 	padding: 10px;
@@ -430,13 +432,13 @@ input {
 fieldset input {
 	border: 0;
 }
-#enterPayment label span, #newClientForm label span, #loginform label span, #clientcontact label span {
+#enterPayment label span, #newClientForm label span, .loginform label span, #clientcontact label span {
 	display: block;
 	float: left;
 	width: 150px;
 	margin: 0;
 }
-#newClientForm label, #loginform label {
+#newClientForm label, .loginform label {
 	line-height: 150%;
 }
 .required {

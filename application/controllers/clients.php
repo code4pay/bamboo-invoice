@@ -14,7 +14,7 @@ class Clients extends MY_Controller {
 
 	function index()
 	{
-		$data['clientList'] = $this->clients_model->getAllClients(); // activate the option
+		$data['clientList'] = $this->clients_model->getAllClients($this->session->userdata('company_id')); // activate the option
 		$data['extraHeadContent'] = "<link type=\"text/css\" rel=\"stylesheet\" href=\"" . base_url()."css/clients.css\" />\n";
 		$data['extraHeadContent'] .= "<script type=\"text/javascript\" src=\"" . base_url()."js/newinvoice.js\"></script>\n";
 		$data['extraHeadContent'] .= "<script type=\"text/javascript\" src=\"" . base_url()."js/clients.js\"></script>\n";
@@ -29,10 +29,10 @@ class Clients extends MY_Controller {
 			$data['message'] = $this->session->flashdata('message');
 		}
 
-		$data['total_rows'] = $this->clients_model->countAllClients();
+		$data['total_rows'] = $this->clients_model->countAllClients($this->session->userdata('company_id'));
 
 		// Run the limited version of the query
-		$data['all_clients'] = $this->clients_model->getAllClients();
+		$data['all_clients'] = $this->clients_model->getAllClients($this->session->userdata('company_id'));
 
 		$this->_validation_client_contact(); // validation info for id, first_name, last_name, email, phone
 
@@ -87,7 +87,8 @@ class Clients extends MY_Controller {
 				'postal_code' => $this->input->post('postal_code'),
 				'website' => $this->input->post('website'),
 				'tax_status' => $this->input->post('tax_status'),
-				'tax_code' => $this->input->post('tax_code')
+				'tax_code' => $this->input->post('tax_code'),
+                'company_id' => $this->session->userdata('company_id')
 			);
 
 			// make insertion, grab insert_id

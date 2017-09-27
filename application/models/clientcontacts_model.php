@@ -4,13 +4,14 @@ class clientcontacts_model extends CI_Model {
 	function get_admin_contacts()
 	{
 		$this->db->where('client_id = 0');
+        $this->db->where('company_id', $this->session->userdata('company_id'));
 		$this->db->order_by('last_name');
 		return $this->db->get('clientcontacts');
 	}
 
 	// --------------------------------------------------------------------
 
-	function addClientContact($client_id, $first_name, $last_name, $email, $phone = '', $title = '', $access_level = 0)
+	function addClientContact($client_id, $first_name, $last_name, $email, $phone = '', $title = '', $access_level = 0, $company_id)
 	{
 		$contact_info = array(
 							'client_id' => (int) $client_id,
@@ -19,7 +20,8 @@ class clientcontacts_model extends CI_Model {
 							'email' => $email,
 							'phone' => $phone,
 							'title' => $title,
-							'access_level' => $access_level
+							'access_level' => $access_level,
+                            'company_id' =>$company_id
 							);
 
 		$this->db->insert('clientcontacts', $contact_info);

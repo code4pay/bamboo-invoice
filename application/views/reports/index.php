@@ -9,8 +9,8 @@ $tax2 = 0;
 <p id="report_shortlinks"><?php echo anchor ("reports/dates/$current_year-01-01/$current_year-03-31/", $this->lang->line('reports_first_quarter'));?>, <?php echo anchor ("reports/dates/$current_year-04-01/$current_year-06-30/", $this->lang->line('reports_second_quarter'));?>, <?php echo anchor ("reports/dates/$current_year-07-01/$current_year-09-31/", $this->lang->line('reports_third_quarter'));?>, <?php echo anchor ("reports/dates/$current_year-10-01/$current_year-12-31/", $this->lang->line('reports_fourth_quarter'));?></p>
 
 <?php echo form_open('reports/dates');?>
-<p><label for="startDate"><?php echo $this->lang->line('reports_start_date');?> <input type="text" id="startDate" size="10" name="startDate" value="<?php echo date("Y-m-d");?>" /></label> 
-<label for="endDate"><?php echo $this->lang->line('reports_end_date');?> <input type="text" id="endDate" size="10" name="endDate" value="<?php echo date("Y-m-d");?>" /></label> <input type="submit" value="<?php echo $this->lang->line('reports_generate_report');?>" /></p>
+<p><label for="startDate"><?php echo $this->lang->line('reports_start_date');?> <input type="text" class="datePicker" id="startDate" size="10" name="startDate" value="" /></label>
+<label for="endDate"><?php echo $this->lang->line('reports_end_date');?> <input type="text" id="endDate" class="datePicker" size="10" name="endDate" value="" /></label> <input type="submit" value="<?php echo $this->lang->line('reports_generate_report');?>" /></p>
 </form>
 
 <h3><?php echo $this->lang->line('reports_yearly_income').' '.$current_year;?></h3>
@@ -120,7 +120,16 @@ if (max($month_tax2) != 0) {
 <?php endif; ?>
 <?php endif; ?>
 </ul>
+<script>
 
+    $$(".datePicker").each(function(picker){
+        new Pikaday({
+            field: picker,
+            format: "YYYY-MM-DD",
+            defaultDate: "<?php echo date("Y-m-d") ?>"
+        });
+    });
+</script>
 
 <?php
 $this->load->view('footer');

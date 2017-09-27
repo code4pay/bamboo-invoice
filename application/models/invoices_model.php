@@ -190,7 +190,7 @@ class invoices_model extends CI_Model {
 		{
 			return FALSE;
 		}
-
+        $this->db->where('invoices.company_id', $this->session->userdata('company_id'));
 		if (is_numeric($invoice_id))
 		{
 			$this->db->where('invoices.id', $invoice_id);
@@ -231,8 +231,8 @@ class invoices_model extends CI_Model {
 		$this->db->group_by('invoices.id'); 
 		$this->db->offset($offset);
 		$this->db->limit($limit);
-
-		return $this->db->get('invoices');
+        $invoices =  $this->db->get('invoices');
+        return $invoices;
 	}
 
 	// --------------------------------------------------------------------
@@ -243,7 +243,7 @@ class invoices_model extends CI_Model {
 		{
 			$this->db->where('client_id', $client_id);
 		}
-
+        $this->db->where('invoices.company_id', $this->session->userdata('company_id'));
 		$this->db->where('invoice_number != ""');
 		$this->db->order_by("id", "desc"); 
 		$this->db->limit(1);
@@ -265,7 +265,7 @@ class invoices_model extends CI_Model {
 	function uniqueInvoiceNumber($invoice_number)
 	{
 		$this->db->where('invoice_number', $invoice_number);
-
+        $this->db->where('invoices.company_id', $this->session->userdata('company_id'));
 		$query = $this->db->get('invoices');
 
 		$num_rows = $query->num_rows();
@@ -285,6 +285,7 @@ class invoices_model extends CI_Model {
 	function uniqueInvoiceNumberEdit($invoice_number, $invoice_id)
 	{
 		$this->db->where('invoice_number', $invoice_number);
+        $this->db->where('invoices.company_id', $this->session->userdata('company_id'));
 		$this->db->where('id != ', $invoice_id);
 		$query = $this->db->get('invoices');
 

@@ -16,7 +16,7 @@ class MY_Controller extends CI_Controller
 
 		// a list of unlocked (ie: not password protected) controllers.  We assume
 		// controllers are locked if they aren't explicitly on this list
-		$unlocked = array('changelog', 'credits', 'donate', 'front', 'help', 'login');
+		$unlocked = array('changelog', 'credits', 'donate', 'front', 'help', 'login', 'signup');
 
 		if ( ! $this->site_sentry->is_logged_in() AND ! in_array(strtolower(get_class($this)), $unlocked))
 		{

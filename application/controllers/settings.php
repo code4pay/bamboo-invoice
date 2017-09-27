@@ -15,12 +15,12 @@ class Settings extends MY_Controller {
 	function index()
 	{
 		$this->_validation(); // Load the validation rules and fields
-
+        $this->_error = false;
 		$data['extraHeadContent'] = "<script type=\"text/javascript\" src=\"". base_url()."js/glider.js\"></script>\n";
 		$data['extraHeadContent'] .= "<script type=\"text/javascript\" src=\"". base_url()."js/settings.js\"></script>\n";
 		$data['extraHeadContent'] .= "<link type=\"text/css\" rel=\"stylesheet\" href=\"". base_url()."css/settings.css\" />\n";
 
-		$data['company_logo'] = get_logo($this->settings_model->get_setting('logo'));
+    		$data['company_logo'] = get_logo($this->settings_model->get_setting('logo'),'web', $this->session->userdata('company_id') );
 
 		if ( ! $this->validation->run())
 		{
@@ -35,6 +35,7 @@ class Settings extends MY_Controller {
 			}
 
 			// grab existing prefs
+            $this->db->where('id', $this->session->userdata('company_id'));
 			$data['row'] = $this->db->get('settings')->row();
 			$data['page_title'] = $this->lang->line('menu_settings');
 			$this->load->view('settings/index', $data);
@@ -42,8 +43,20 @@ class Settings extends MY_Controller {
 		else
 		{
 			$save_invoices = ($this->input->post('save_invoices') == 'y') ? 'y' : 'n';
+            $extra_message = '';
+			// check for duplicate emails
+            $currentSettings = $this->settings_model->get_current();
+            if ($currentSettings->primary_contact_email !== $this->input->post('primary_contact_email')){
+                if ($this->settings_model->get_by_email($this->input->post('primary_contact_email'))->num_rows()){
+                    $extra_message = $this->lang->line('settings_duplicate_email');
+                   $this->session->set_flashdata('status', $this->lang->line('settings_modify_fail') . ' ' . $extra_message);
+                   redirect('settings');
+               }
 
-			$data = array(
+
+            }
+
+            $data = array(
 							'company_name' => $this->input->post('company_name'),
 							'address1' => $this->input->post('address1'),
 							'address2' => $this->input->post('address2'),
@@ -72,15 +85,16 @@ class Settings extends MY_Controller {
 			$data['currency_symbol'] = ($data['currency_symbol'] == '€') ? '&#0128;' : $data['currency_symbol'];
 
 			// Logo uploading
-			$config['upload_path'] 		= './img/logo/';
+			$config['upload_path'] 		= './img/logo/'. $this->session->userdata('company_id').'/';
 			$config['allowed_types'] 	= 'gif|jpg';
 			$config['max_size'] 		= '500'; 
 			$config['max_width'] 		= '900';
 			$config['max_height'] 		= '200'; // these are WAY more then someone should need for a logo
 
+
 			$this->load->library('upload', $config);
 
-			$extra_message = '';
+
 
 			if ($this->upload->do_upload())
 			{
@@ -91,7 +105,14 @@ class Settings extends MY_Controller {
 				$data['logo_pdf'] = $logo_data['file_name'];
 			}
 
-			$extra_message .= ($this->input->post('userfile') != '') ? $this->upload->display_errors('<br />') : '';
+
+            if ($this->upload->display_errors()){
+                $extra_message .= $this->upload->display_errors('<br />');
+                $this->_error = true;
+
+            }
+
+
 
 			// run the update
 			$update_settings = $this->settings_model->update_settings($data);
@@ -114,17 +135,74 @@ class Settings extends MY_Controller {
 					$this->clientcontacts_model->password_change(1, $this->input->post('password'));
 				}
 
-				$this->session->set_flashdata('status', $this->lang->line('settings_modify_success') . ' ' . $extra_message);
+
 			}
 			else
 			{
-				$this->session->set_flashdata('status', $this->lang->line('settings_modify_fail') . ' ' . $extra_message);
+				$this->_error = true;
+
 			}
+
+            if ($this->_error === true){
+                $this->session->set_flashdata('status', $this->lang->line('settings_modify_fail') . ' ' . $extra_message);
+            }else{
+                $this->session->set_flashdata('status', $this->lang->line('settings_modify_success') . ' ' . $extra_message);
+            }
 
 			// running a redirect here instead of loading a view because glider.js seems to freeze without the reload
 			redirect('settings');
 		}
 	}
+
+    function add()
+    {
+        if ($this->input->post('primary_contact_email') != '' && $this->settings_model->get_setting('demo_flag') != 'y')
+        {
+            $this->clientcontacts_model->email_change(1, $this->input->post('primary_contact_email'));
+        }
+
+        $data = array (
+            'primary_contact_email' => $this->input->post('primary_contact_email')
+        );
+        // was the password getting changed, and if so, be sure this isn't the demo
+        if ($this->input->post('password') != '' && $this->input->post('password') == $this->input->post('password_confirm') && $this->settings_model->get_setting('demo_flag') != 'y')
+        {
+            $this->clientcontacts_model->password_change(1, $this->input->post('password'));
+        }
+
+
+
+    }
+
+
+
+
+    function signedUp()
+    {
+
+
+
+//      $this->db->set('id', 1);
+        $this->db->set('primary_contact_email', $this->input->post('primary_contact_email'));
+        $this->db->set('primary_contact',$this->input->post('primary_contact'));
+        $this->db->insert('settings');
+        $setting_id = $this->db->insert_id();
+        //create a setting
+        // Insert some starting data, username and password
+        //$this->db->set('id', );
+        $this->db->set('client_id', 0);
+        $this->db->set('email', $this->input->post('primary_contact_email'));
+        $this->db->set('password', $this->encrypt->encode($this->input->post('admin_password')));
+        $this->db->set('last_login', time());
+        $this->db->set('access_level', 1);
+        $this->db->set('company_id',$setting_id);
+        $this->db->insert('clientcontacts');
+
+
+
+        // create a client contact
+
+    }
 
 	// --------------------------------------------------------------------
 
